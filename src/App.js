@@ -152,7 +152,7 @@ export default function App() {
               <div style={{ background: '#111', border: '1px solid #2a4a2a', borderRadius: 6, padding: 20, marginBottom: 20 }}>
                 <div style={{ fontSize: 11, letterSpacing: 3, color: '#7ab87a', textTransform: 'uppercase', marginBottom: 14 }}>New Session</div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
-                  {[{label:'Date',key:'date',placeholder:'Friday May 23'},{label:'Time',key:'time',type:'time'},{label:'Duration (h)',key:'duration',placeholder:'2',type:'number'},{label:'Spots',key:'spots',placeholder:'20',type:'number'}].map(f => (
+                  {[{label:'Date',key:'date',type:'date'},{label:'Time',key:'time',type:'time'},{label:'Duration (h)',key:'duration',placeholder:'2',type:'number'},{label:'Spots',key:'spots',placeholder:'20',type:'number'}].map(f => (
                     <div key={f.key}><label style={S.label}>{f.label}</label><input type={f.type||'text'} value={newSession[f.key]} placeholder={f.placeholder||''} onChange={e => setNewSession({...newSession,[f.key]:e.target.value})} style={S.inp}/></div>
                   ))}
                 </div>
