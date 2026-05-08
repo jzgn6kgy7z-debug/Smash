@@ -52,19 +52,19 @@ const QUOTES = [
   { text: "Suffer what there is to suffer, enjoy what there is to enjoy — but always play padel.", emoji: "🎾" },
   { text: "Winter always turns to spring.", emoji: "🌱" },
   { text: "The greater the hardship, the greater the benefit.", emoji: "💎" },
-  { text: "I came. I chanted. I smashed.", emoji: "🏆" },
-  { text: "Difficulties are not obstacles — they are the path. Especially the wall shot.", emoji: "⛰️" },
+  { text: "Difficulties are not obstacles — they are the path.", emoji: "⛰️" },
   { text: "Iron, when heated in the flames, becomes a fine sword. My backhand is still in the flames.", emoji: "⚔️" },
   { text: "Rise up and fight. That is what it means to be alive.", emoji: "🔥" },
-  { text: "The treasure tower exists in each of us. Mine is hidden behind a terrible lob.", emoji: "🏯" },
-  { text: "Nam-myoho-renge-kyo is like the roar of a lion. My serve sounds more like a kitten.", emoji: "🦁" },
   { text: "Each moment is the only moment — give it everything.", emoji: "💙" },
-  { text: "The heart of the Lotus Sutra is the dignity of life. The heart of padel is not double faulting.", emoji: "🌺" },
-  { text: "Kosen-rufu begins with a single courageous step. Or a well-placed smash.", emoji: "👣" },
-  { text: "Your voice resonates throughout the universe. Especially when you blame your partner.", emoji: "✨" },
-  { text: "Happiness never decreases by being shared — unless it's sharing a court with a bandalero.", emoji: "🙏" },
-  { text: "A single word can save or destroy a life. That word is 'yours'.", emoji: "📿" },
   { text: "Do not dwell in the past. That ball was out. Move on.", emoji: "🌊" },
+  { text: "Happiness never decreases by being shared — unless you're sharing a court with a bandalero.", emoji: "😅" },
+  { text: "A single word can save a game. That word is 'yours'.", emoji: "🎯" },
+  { text: "Your voice resonates throughout the universe. Especially when you blame your partner.", emoji: "✨" },
+  { text: "Change yourself, and you change the world.", emoji: "🌍" },
+  { text: "The treasure is within you. So is the double fault.", emoji: "🏯" },
+  { text: "Courage is not the absence of fear. It's doing a smash overhead anyway.", emoji: "💪" },
+  { text: "True victory is victory over oneself. And that impossible return.", emoji: "🏆" },
+  { text: "Every person has the power to change their destiny. Even their serve.", emoji: "🌟" },
 ];
 
 const LEVELS = [1,2,3,4,5,6];
@@ -141,7 +141,7 @@ function QuoteBanner() {
       <div className="shimmer" style={{ position:'absolute', inset:0, pointerEvents:'none' }} />
       <div style={{ fontSize:32, flexShrink:0 }}>{q.emoji}</div>
       <div style={{ opacity: visible?1:0, transform: visible?'translateY(0)':'translateY(6px)', transition:'all 0.4s ease' }}>
-        <div style={{ fontSize:13, color:'#b8d4f8', fontStyle:'italic', lineHeight:1.5, fontFamily:'Inter,sans-serif' }}>"{q.text}"</div>
+        <div style={{ fontSize:13, color:'#c8dcf8', fontStyle:'italic', lineHeight:1.5, fontFamily:'Inter,sans-serif' }}>"{q.text}"</div>
         <div style={{ fontSize:10, color:'#2a50d8', marginTop:4, letterSpacing:1, textTransform:'uppercase' }}>Padel Wisdom</div>
       </div>
     </div>
@@ -164,7 +164,7 @@ function LevelPicker({ value, onChange, size=44 }) {
 function Toast({ toast }) {
   if (!toast) return null;
   return (
-    <div className="fade-up" style={{ position:'fixed', top:20, left:'50%', transform:'translateX(-50%)', background:'#0e2040', border:`1px solid ${toast.color}`, color:toast.color, padding:'12px 24px', borderRadius:24, fontSize:14, zIndex:999, whiteSpace:'nowrap', boxShadow:`0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px ${toast.color}33`, display:'flex', alignItems:'center', gap:10, fontFamily:'Inter,sans-serif', fontWeight:600 }}>
+    <div className="fade-up" style={{ position:'fixed', top:20, left:'50%', transform:'translateX(-50%)', background:'#142040', border:`1px solid ${toast.color}`, color:toast.color, padding:'12px 24px', borderRadius:24, fontSize:14, zIndex:999, whiteSpace:'nowrap', boxShadow:`0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px ${toast.color}33`, display:'flex', alignItems:'center', gap:10, fontFamily:'Inter,sans-serif', fontWeight:600 }}>
       <span style={{ fontSize:20 }}>{toast.emoji}</span>
       {toast.msg}
     </div>
@@ -173,9 +173,9 @@ function Toast({ toast }) {
 
 function StatPill({ label, value, color }) {
   return (
-    <div style={{ background:'#0d1c32', border:'1px solid #162268', borderRadius:10, padding:'10px 16px', textAlign:'center', flex:1 }}>
+    <div style={{ background:'#12203a', border:'1px solid #162268', borderRadius:10, padding:'10px 16px', textAlign:'center', flex:1 }}>
       <div style={{ fontSize:22, fontWeight:800, color:color||'#6b9ef0', fontFamily:'Inter,sans-serif' }}>{value}</div>
-      <div style={{ fontSize:10, color:'#223c82', letterSpacing:1, textTransform:'uppercase', marginTop:2, fontFamily:'Inter,sans-serif' }}>{label}</div>
+      <div style={{ fontSize:10, color:'#3a5a88', letterSpacing:1, textTransform:'uppercase', marginTop:2, fontFamily:'Inter,sans-serif' }}>{label}</div>
     </div>
   );
 }
@@ -187,7 +187,7 @@ function NameEntry({ onEnter }) {
   const [level, setLevel] = useState(3);
   const [qi] = useState(() => Math.floor(Math.random()*QUOTES.length));
   return (
-    <div style={{ minHeight:'100vh', background:'radial-gradient(ellipse at top, #0e1e35 0%, #080f1c 60%)', fontFamily:'Inter,sans-serif', color:'#f0ece0', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:32 }}>
+    <div style={{ minHeight:'100vh', background:'radial-gradient(ellipse at top, #111c2e 0%, #090d18 60%)', fontFamily:'Inter,sans-serif', color:'#f0f4ff', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:32 }}>
       <style>{CSS}</style>
 
       {/* Decorative balls */}
@@ -197,26 +197,26 @@ function NameEntry({ onEnter }) {
       <div style={{ position:'fixed', bottom:40, right:40, fontSize:28, opacity:0.12, animation:'spin 18s linear infinite reverse' }}>🎾</div>
 
       <div className="ball-bounce" style={{ fontSize:72, marginBottom:12 }}>🎾</div>
-      <h1 style={{ margin:'0 0 6px', fontSize:56, fontWeight:900, letterSpacing:-1, color:'#e8f2ff', textShadow:'0 0 40px rgba(91,141,238,0.3)' }}>Smash</h1>
-      <p style={{ color:'#244490', marginBottom:8, fontSize:15, fontWeight:500 }}>Your padel group hub</p>
+      <h1 style={{ margin:'0 0 6px', fontSize:56, fontWeight:900, letterSpacing:-1, color:'#ffffff', textShadow:'0 0 40px rgba(91,141,238,0.3)' }}>Smash</h1>
+      <p style={{ color:'#3a5e98', marginBottom:8, fontSize:15, fontWeight:500 }}>Your padel group hub</p>
 
-      <div style={{ background:'#0e1e38', border:'1px solid #1e4a1e', borderRadius:10, padding:'8px 20px', marginBottom:32, fontSize:13, color:'#6b9ef0', fontStyle:'italic', textAlign:'center', maxWidth:320, lineHeight:1.5 }}>
+      <div style={{ background:'#131e38', border:'1px solid #1e4a1e', borderRadius:10, padding:'8px 20px', marginBottom:32, fontSize:13, color:'#7aacdc', fontStyle:'italic', textAlign:'center', maxWidth:320, lineHeight:1.5 }}>
         "{QUOTES[qi].text}" {QUOTES[qi].emoji}
       </div>
 
-      <div className="fade-up" style={{ width:'100%', maxWidth:360, background:'#0c1628', border:'1px solid #162268', borderRadius:20, padding:28, boxShadow:'0 24px 64px rgba(0,0,0,0.6)' }}>
+      <div className="fade-up" style={{ width:'100%', maxWidth:360, background:'#101828', border:'1px solid #162268', borderRadius:20, padding:28, boxShadow:'0 24px 64px rgba(0,0,0,0.6)' }}>
         <div style={{ marginBottom:20 }}>
-          <label style={{ fontSize:11, letterSpacing:2, color:'#243c8a', textTransform:'uppercase', display:'block', marginBottom:8, fontWeight:600 }}>Your Name</label>
+          <label style={{ fontSize:11, letterSpacing:2, color:'#3a5c8a', textTransform:'uppercase', display:'block', marginBottom:8, fontWeight:600 }}>Your Name</label>
           <input value={name} onChange={e=>setName(e.target.value)} onKeyDown={e=>e.key==='Enter'&&name.trim()&&onEnter(name.trim(),level)}
             placeholder="e.g. Massimo"
-            style={{ width:'100%', background:'#0d1c32', border:'2px solid #162268', color:'#f0ece0', fontFamily:'Inter,sans-serif', fontSize:18, fontWeight:600, padding:'12px 16px', borderRadius:10, boxSizing:'border-box' }} autoFocus />
+            style={{ width:'100%', background:'#12203a', border:'2px solid #162268', color:'#f0f4ff', fontFamily:'Inter,sans-serif', fontSize:18, fontWeight:600, padding:'12px 16px', borderRadius:10, boxSizing:'border-box' }} autoFocus />
         </div>
         <div style={{ marginBottom:24 }}>
-          <label style={{ fontSize:11, letterSpacing:2, color:'#243c8a', textTransform:'uppercase', display:'block', marginBottom:14, fontWeight:600, textAlign:'center' }}>Your Level (1=Pro · 6=Newcomer)</label>
+          <label style={{ fontSize:11, letterSpacing:2, color:'#3a5c8a', textTransform:'uppercase', display:'block', marginBottom:14, fontWeight:600, textAlign:'center' }}>Your Level (1=Pro · 6=Newcomer)</label>
           <LevelPicker value={level} onChange={setLevel} />
         </div>
         <button className="btn-hover pulse-btn glow-green" onClick={()=>name.trim()&&onEnter(name.trim(),level)}
-          style={{ width:'100%', background:'linear-gradient(135deg,#1e4a90,#162e6a)', border:'none', color:'#d4e6f8', fontFamily:'Inter,sans-serif', fontSize:15, fontWeight:700, letterSpacing:1, padding:'14px 20px', cursor:'pointer', borderRadius:12, boxShadow:'0 4px 16px rgba(40,90,160,0.4)' }}>
+          style={{ width:'100%', background:'linear-gradient(135deg,#1e4a90,#162e6a)', border:'none', color:'#dceaf8', fontFamily:'Inter,sans-serif', fontSize:15, fontWeight:700, letterSpacing:1, padding:'14px 20px', cursor:'pointer', borderRadius:12, boxShadow:'0 4px 16px rgba(40,90,160,0.4)' }}>
           Enter Smash 🎾
         </button>
       </div>
@@ -226,7 +226,7 @@ function NameEntry({ onEnter }) {
 
 // ── Input style ───────────────────────────────────────────────────────────────
 
-const INP = { width:'100%', background:'#0c1628', border:'1px solid #162268', color:'#f0ece0', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:500, padding:'10px 12px', borderRadius:8, boxSizing:'border-box' };
+const INP = { width:'100%', background:'#101828', border:'1px solid #162268', color:'#f0f4ff', fontFamily:'Inter,sans-serif', fontSize:14, fontWeight:500, padding:'10px 12px', borderRadius:8, boxSizing:'border-box' };
 const BTN = (c='#b8d4f8',bg='#142458',b='#2e56b0') => ({ background:bg, border:`1px solid ${b}`, color:c, fontFamily:'Inter,sans-serif', fontSize:11, fontWeight:700, letterSpacing:1.5, textTransform:'uppercase', padding:'9px 16px', cursor:'pointer', borderRadius:8, transition:'all 0.2s' });
 
 // ── Main App ──────────────────────────────────────────────────────────────────
@@ -310,32 +310,32 @@ export default function App() {
   const totalConfirmed = sessions.reduce((a,s)=>(s.signups||[]).includes(currentUser)?a+1:a,0);
 
   return (
-    <div style={{ minHeight:'100vh', background:'radial-gradient(ellipse at top, #0e1e35 0%, #080f1c 70%)', fontFamily:'Inter,sans-serif', color:'#f0ece0' }}>
+    <div style={{ minHeight:'100vh', background:'radial-gradient(ellipse at top, #111c2e 0%, #090d18 70%)', fontFamily:'Inter,sans-serif', color:'#f0f4ff' }}>
       <style>{CSS}</style>
       <Toast toast={toast} />
 
       {/* Header */}
-      <div style={{ background:'rgba(10,18,32,0.97)', borderBottom:'1px solid #142458', backdropFilter:'blur(10px)', position:'sticky', top:0, zIndex:100 }}>
+      <div style={{ background:'rgba(10,15,25,0.98)', borderBottom:'1px solid #142458', backdropFilter:'blur(10px)', position:'sticky', top:0, zIndex:100 }}>
         <div style={{ maxWidth:600, margin:'0 auto', padding:'0 16px' }}>
           <div style={{ paddingTop:20, paddingBottom:12, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
             <div>
               <div style={{ display:'flex', alignItems:'center', gap:10 }}>
                 <span style={{ fontSize:28 }}>🎾</span>
-                <h1 style={{ fontSize:28, fontWeight:900, letterSpacing:-0.5, color:'#e8f2ff', margin:0 }}>Smash</h1>
+                <h1 style={{ fontSize:28, fontWeight:900, letterSpacing:-0.5, color:'#ffffff', margin:0 }}>Smash</h1>
               </div>
-              <div style={{ fontSize:11, color:'#223c82', marginTop:2, letterSpacing:1 }}>{players.length} MEMBERS · {sessions.length} SESSIONS</div>
+              <div style={{ fontSize:11, color:'#3a5a88', marginTop:2, letterSpacing:1 }}>{players.length} MEMBERS · {sessions.length} SESSIONS</div>
             </div>
             <div style={{ textAlign:'right' }}>
               <div style={{ display:'flex', alignItems:'center', gap:8, justifyContent:'flex-end' }}>
-                <div style={{ background:'#0e2040', border:'1px solid #2e56b0', borderRadius:10, padding:'6px 12px' }}>
-                  <div style={{ fontSize:11, color:'#244490', fontWeight:600 }}>Playing as</div>
+                <div style={{ background:'#142040', border:'1px solid #2e56b0', borderRadius:10, padding:'6px 12px' }}>
+                  <div style={{ fontSize:11, color:'#3a5e98', fontWeight:600 }}>Playing as</div>
                   <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                    <span style={{ fontSize:14, fontWeight:700, color:'#b8d4f8' }}>{currentUser}</span>
+                    <span style={{ fontSize:14, fontWeight:700, color:'#c8dcf8' }}>{currentUser}</span>
                     <LevelBadge level={playerMap[currentUser]?.level} />
                   </div>
                 </div>
               </div>
-              <button onClick={()=>{localStorage.removeItem('smash_name');setCurrentUser(null);}} style={{ background:'none',border:'none',color:'#1e3078',fontSize:10,cursor:'pointer',marginTop:4,fontFamily:'Inter,sans-serif' }}>change →</button>
+              <button onClick={()=>{localStorage.removeItem('smash_name');setCurrentUser(null);}} style={{ background:'none',border:'none',color:'#3a5888',fontSize:10,cursor:'pointer',marginTop:4,fontFamily:'Inter,sans-serif' }}>change →</button>
             </div>
           </div>
           <div style={{ display:'flex', gap:4 }}>
@@ -350,7 +350,7 @@ export default function App() {
         {loading && (
           <div style={{ textAlign:'center', padding:64 }}>
             <div style={{ fontSize:40, animation:'spin 1s linear infinite', display:'inline-block' }}>🎾</div>
-            <div style={{ color:'#223c82', marginTop:12, fontSize:13, fontWeight:500 }}>Loading your courts...</div>
+            <div style={{ color:'#3a5a88', marginTop:12, fontSize:13, fontWeight:500 }}>Loading your courts...</div>
           </div>
         )}
 
@@ -367,7 +367,7 @@ export default function App() {
             </div>
 
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-              <h2 style={{ fontSize:18, fontWeight:800, color:'#d4e6f8', margin:0 }}>Upcoming Sessions</h2>
+              <h2 style={{ fontSize:18, fontWeight:800, color:'#dceaf8', margin:0 }}>Upcoming Sessions</h2>
               <button className="btn-hover" onClick={()=>setShowNew(!showNew)}
                 style={{ background:showNew?'#2a1a1a':'linear-gradient(135deg,#0f2a5a,#0a1a48)', border:`1px solid ${showNew?'#5a2a2a':'#3a68c0'}`, color:showNew?'#d87a7a':'#b8d4f8', fontFamily:'Inter,sans-serif', fontSize:11, fontWeight:700, letterSpacing:1.5, textTransform:'uppercase', padding:'9px 18px', cursor:'pointer', borderRadius:10 }}>
                 {showNew?'✕ Cancel':'+ New Session'}
@@ -376,33 +376,33 @@ export default function App() {
 
             {/* New session form */}
             {showNew && (
-              <div className="slide-in" style={{ background:'#0c1628', border:'1px solid #1e4a1e', borderRadius:16, padding:20, marginBottom:20, boxShadow:'0 8px 32px rgba(0,0,0,0.4)' }}>
-                <div style={{ fontSize:12, fontWeight:700, letterSpacing:2, color:'#6b9ef0', textTransform:'uppercase', marginBottom:16 }}>🏟️ New Session</div>
+              <div className="slide-in" style={{ background:'#101828', border:'1px solid #1e4a1e', borderRadius:16, padding:20, marginBottom:20, boxShadow:'0 8px 32px rgba(0,0,0,0.4)' }}>
+                <div style={{ fontSize:12, fontWeight:700, letterSpacing:2, color:'#7aacdc', textTransform:'uppercase', marginBottom:16 }}>🏟️ New Session</div>
                 <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:10 }}>
                   {[{label:'Date',key:'date',type:'date'},{label:'Time',key:'time',type:'time'},{label:'Duration (h)',key:'duration',placeholder:'2',type:'number'},{label:'Spots',key:'spots',placeholder:'20',type:'number'}].map(f=>(
                     <div key={f.key}>
-                      <label style={{ fontSize:10,letterSpacing:2,color:'#243c8a',textTransform:'uppercase',display:'block',marginBottom:6,fontWeight:600 }}>{f.label}</label>
+                      <label style={{ fontSize:10,letterSpacing:2,color:'#3a5c8a',textTransform:'uppercase',display:'block',marginBottom:6,fontWeight:600 }}>{f.label}</label>
                       <input type={f.type||'text'} value={newS[f.key]} placeholder={f.placeholder||''} onChange={e=>setNewS({...newS,[f.key]:e.target.value})} style={INP} />
                     </div>
                   ))}
                 </div>
                 <div style={{ marginBottom:10 }}>
-                  <label style={{ fontSize:10,letterSpacing:2,color:'#243c8a',textTransform:'uppercase',display:'block',marginBottom:6,fontWeight:600 }}>Venue</label>
+                  <label style={{ fontSize:10,letterSpacing:2,color:'#3a5c8a',textTransform:'uppercase',display:'block',marginBottom:6,fontWeight:600 }}>Venue</label>
                   <input value={newS.location_name} placeholder="e.g. Padel Lisboa Court 1" onChange={e=>setNewS({...newS,location_name:e.target.value})} style={INP} />
                 </div>
                 <div style={{ marginBottom:16 }}>
-                  <label style={{ fontSize:10,letterSpacing:2,color:'#243c8a',textTransform:'uppercase',display:'block',marginBottom:6,fontWeight:600 }}>Address</label>
+                  <label style={{ fontSize:10,letterSpacing:2,color:'#3a5c8a',textTransform:'uppercase',display:'block',marginBottom:6,fontWeight:600 }}>Address</label>
                   <input value={newS.location_address} placeholder="e.g. Av. da Liberdade 110" onChange={e=>setNewS({...newS,location_address:e.target.value})} style={INP} />
                 </div>
                 <button className="btn-hover" onClick={handleCreate}
-                  style={{ background:'linear-gradient(135deg,#1e4a90,#162e6a)', border:'none', color:'#d4e6f8', fontFamily:'Inter,sans-serif', fontSize:12, fontWeight:700, letterSpacing:1.5, textTransform:'uppercase', padding:'12px 24px', cursor:'pointer', borderRadius:10, boxShadow:'0 4px 12px rgba(40,90,160,0.25)' }}>
+                  style={{ background:'linear-gradient(135deg,#1e4a90,#162e6a)', border:'none', color:'#dceaf8', fontFamily:'Inter,sans-serif', fontSize:12, fontWeight:700, letterSpacing:1.5, textTransform:'uppercase', padding:'12px 24px', cursor:'pointer', borderRadius:10, boxShadow:'0 4px 12px rgba(40,90,160,0.25)' }}>
                   Create Session 🎾
                 </button>
               </div>
             )}
 
             {sessions.length===0 && (
-              <div style={{ textAlign:'center', padding:'48px 24px', color:'#223c82' }}>
+              <div style={{ textAlign:'center', padding:'48px 24px', color:'#3a5a88' }}>
                 <div style={{ fontSize:48, marginBottom:12 }}>🏟️</div>
                 <div style={{ fontSize:16, fontWeight:600, marginBottom:8 }}>No sessions yet</div>
                 <div style={{ fontSize:13 }}>Create your first session and get the squad together!</div>
@@ -419,15 +419,15 @@ export default function App() {
               const announceMsg=buildAnnounceMsg(session);
 
               return (
-                <div key={session.id} className="card fade-up" style={{ background:'#0c1628', border:'1px solid #142458', borderRadius:16, marginBottom:16, overflow:'hidden', animationDelay:`${si*0.05}s` }}>
+                <div key={session.id} className="card fade-up" style={{ background:'#101828', border:'1px solid #142458', borderRadius:16, marginBottom:16, overflow:'hidden', animationDelay:`${si*0.05}s` }}>
                   {/* Card header */}
                   <div style={{ background:'linear-gradient(135deg,#0d1e38,#080e1e)', padding:'16px 18px', borderBottom:'1px solid #142458', position:'relative', overflow:'hidden' }}>
                     <div className="shimmer" style={{ position:'absolute', inset:0, pointerEvents:'none' }} />
                     <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
                       <div>
-                        <div style={{ fontSize:18, fontWeight:800, color:'#d4e6f8', letterSpacing:-0.3 }}>{formatDate(session.date)}</div>
-                        <div style={{ fontSize:13, color:'#5080d0', marginTop:4, fontWeight:500 }}>{session.time} · {session.duration}h · {session.location_name}</div>
-                        {session.location_address && <div style={{ fontSize:11, color:'#2e56b0', marginTop:2 }}>{session.location_address}</div>}
+                        <div style={{ fontSize:18, fontWeight:800, color:'#dceaf8', letterSpacing:-0.3 }}>{formatDate(session.date)}</div>
+                        <div style={{ fontSize:13, color:'#5a8ed8', marginTop:4, fontWeight:500 }}>{session.time} · {session.duration}h · {session.location_name}</div>
+                        {session.location_address && <div style={{ fontSize:11, color:'#4a76b8', marginTop:2 }}>{session.location_address}</div>}
                       </div>
                       <div style={{ background:isFull?'#3a1a1a':'#0d2a6a', border:`1px solid ${isFull?'#6a2a2a':'#2a7a2a'}`, color:isFull?'#ff7a7a':'#8ec4f0', fontSize:11, fontWeight:700, letterSpacing:1, textTransform:'uppercase', padding:'4px 10px', borderRadius:8, flexShrink:0 }}>
                         {isFull?'FULL':`${session.spots-signups.length} LEFT`}
@@ -438,10 +438,10 @@ export default function App() {
                   <div style={{ padding:'16px 18px' }}>
                     {/* Progress bar */}
                     <div style={{ marginBottom:16 }}>
-                      <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color:'#223c82', marginBottom:6, fontWeight:600 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color:'#3a5a88', marginBottom:6, fontWeight:600 }}>
                         <span>{signups.length} confirmed</span><span>{session.spots} spots</span>
                       </div>
-                      <div style={{ height:6, background:'#0d1c32', borderRadius:3, overflow:'hidden' }}>
+                      <div style={{ height:6, background:'#12203a', borderRadius:3, overflow:'hidden' }}>
                         <div className="progress-bar" style={{ height:'100%', width:`${pct}%`, background:isFull?'linear-gradient(90deg,#d87a7a,#ff5a5a)':'linear-gradient(90deg,#6b9ef0,#8ec4f0)', borderRadius:3, boxShadow:isFull?'0 0 8px rgba(255,90,90,0.4)':'0 0 8px rgba(91,141,238,0.3)' }} />
                       </div>
                     </div>
@@ -455,7 +455,7 @@ export default function App() {
                             const pl=playerMap[p];
                             return (
                               <div key={p} className={p===currentUser?'glow-green':''} style={{ display:'flex', alignItems:'center', gap:8, background:p===currentUser?'#0e2040':'#0c1828', border:`1px solid ${p===currentUser?'#2e56b0':'#121e48'}`, borderRadius:8, padding:'8px 12px', transition:'all 0.2s' }}>
-                                <span style={{ color:'#1e3078', fontSize:11, fontWeight:700, minWidth:22 }}>{i+1}.</span>
+                                <span style={{ color:'#3a5888', fontSize:11, fontWeight:700, minWidth:22 }}>{i+1}.</span>
                                 <span style={{ flex:1, fontSize:13, fontWeight:p===currentUser?700:500, color:p===currentUser?'#b8d4f8':'#7a9a7a' }}>{p}{p===currentUser?' ★':''}</span>
                                 <LevelBadge level={pl?.level} />
                               </div>
@@ -472,7 +472,7 @@ export default function App() {
                         <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
                           {waitlist.map((p,i)=>{
                             const pl=playerMap[p];
-                            return <span key={p} style={{ display:'flex',alignItems:'center',gap:5,background:'#1a150a',border:'1px solid #3a2a0a',color:'#c8a86a',fontSize:11,fontWeight:600,padding:'4px 10px',borderRadius:16 }}>#{i+1} {p} <LevelBadge level={pl?.level}/></span>;
+                            return <span key={p} style={{ display:'flex',alignItems:'center',gap:5,background:'#1a150a',border:'1px solid #3a2a0a',color:'#d4b870',fontSize:11,fontWeight:600,padding:'4px 10px',borderRadius:16 }}>#{i+1} {p} <LevelBadge level={pl?.level}/></span>;
                           })}
                         </div>
                       </div>
@@ -484,7 +484,7 @@ export default function App() {
                         <div style={{ fontSize:10,fontWeight:700,letterSpacing:2,color:'#3a2a2a',textTransform:'uppercase',marginBottom:6 }}>✗ Not in ({unsigned.length})</div>
                         <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
                           {unsigned.map(p=>(
-                            <span key={p.name} style={{ display:'flex',alignItems:'center',gap:4,background:'#130a0a',border:'1px solid #2a1a1a',color:'#5a3a3a',fontSize:11,padding:'3px 8px',borderRadius:14 }}>
+                            <span key={p.name} style={{ display:'flex',alignItems:'center',gap:4,background:'#130a0a',border:'1px solid #2a1a1a',color:'#5a6a80',fontSize:11,padding:'3px 8px',borderRadius:14 }}>
                               {p.name} {p.level&&<LevelBadge level={p.level}/>}
                             </span>
                           ))}
@@ -515,25 +515,25 @@ export default function App() {
 
                     {/* Share panel */}
                     {panelOpen && panelType==='share' && (
-                      <div className="slide-in" style={{ background:'#0c1828', border:'1px solid #25d36622', borderRadius:12, overflow:'hidden' }}>
+                      <div className="slide-in" style={{ background:'#111e2e', border:'1px solid #25d36622', borderRadius:12, overflow:'hidden' }}>
                         <div style={{ padding:'10px 16px', borderBottom:'1px solid #0e2040', fontSize:10, fontWeight:700, letterSpacing:2, color:'#25d366', textTransform:'uppercase' }}>🔗 Share & Update</div>
                         <div style={{ padding:'14px 16px', borderBottom:'1px solid #0d1a2e' }}>
-                          <div style={{ fontSize:12, fontWeight:600, color:'#b8d4f8', marginBottom:10 }}>
+                          <div style={{ fontSize:12, fontWeight:600, color:'#c8dcf8', marginBottom:10 }}>
                             <span style={{ background:'#0d2a6a', borderRadius:'50%', padding:'1px 7px', marginRight:8, fontSize:11, fontWeight:800 }}>1</span>
                             Post in your WhatsApp group
                           </div>
-                          <div style={{ background:'#0c1628', borderRadius:8, padding:'10px 12px', fontSize:11, color:'#244490', whiteSpace:'pre-wrap', lineHeight:1.8, marginBottom:10 }}>{announceMsg}</div>
+                          <div style={{ background:'#101828', borderRadius:8, padding:'10px 12px', fontSize:11, color:'#3a5e98', whiteSpace:'pre-wrap', lineHeight:1.8, marginBottom:10 }}>{announceMsg}</div>
                           <div style={{ display:'flex', gap:8 }}>
                             <button className="btn-hover" onClick={()=>copyText(`ann-${session.id}`,announceMsg)} style={{ background:'#0d1f0d', border:`1px solid ${copied[`ann-${session.id}`]?'#25d366':'#142458'}`, color:copied[`ann-${session.id}`]?'#25d366':'#5080d0', fontFamily:'Inter,sans-serif', fontSize:11, fontWeight:700, letterSpacing:1, textTransform:'uppercase', padding:'8px 14px', cursor:'pointer', borderRadius:8 }}>{copied[`ann-${session.id}`]?'✓ Copied!':'📋 Copy'}</button>
                             <a href={`https://wa.me/?text=${encodeURIComponent(announceMsg)}`} target="_blank" rel="noreferrer" style={{ background:'#0d1f0d', border:'1px solid #25d36644', color:'#25d366', fontFamily:'Inter,sans-serif', fontSize:11, fontWeight:700, letterSpacing:1, textTransform:'uppercase', padding:'8px 14px', cursor:'pointer', borderRadius:8, textDecoration:'none', display:'inline-block' }}>📲 Open WA</a>
                           </div>
                         </div>
                         <div style={{ padding:'14px 16px' }}>
-                          <div style={{ fontSize:12, fontWeight:600, color:'#b8d4f8', marginBottom:10 }}>
+                          <div style={{ fontSize:12, fontWeight:600, color:'#c8dcf8', marginBottom:10 }}>
                             <span style={{ background:'#0d2a6a', borderRadius:'50%', padding:'1px 7px', marginRight:8, fontSize:11, fontWeight:800 }}>2</span>
                             Paste update back into the group
                           </div>
-                          <div style={{ background:'#0c1628', borderRadius:8, padding:'10px 12px', fontSize:11, color:'#243c8a', whiteSpace:'pre-wrap', lineHeight:1.8, marginBottom:10 }}>{groupUpdate}</div>
+                          <div style={{ background:'#101828', borderRadius:8, padding:'10px 12px', fontSize:11, color:'#3a5c8a', whiteSpace:'pre-wrap', lineHeight:1.8, marginBottom:10 }}>{groupUpdate}</div>
                           <div style={{ display:'flex', gap:8 }}>
                             <button className="btn-hover" onClick={()=>copyText(`upd-${session.id}`,groupUpdate)} style={{ background:'#0d1f0d', border:`1px solid ${copied[`upd-${session.id}`]?'#25d366':'#142458'}`, color:copied[`upd-${session.id}`]?'#25d366':'#5080d0', fontFamily:'Inter,sans-serif', fontSize:11, fontWeight:700, letterSpacing:1, textTransform:'uppercase', padding:'8px 14px', cursor:'pointer', borderRadius:8 }}>{copied[`upd-${session.id}`]?'✓ Copied!':'📋 Copy Update'}</button>
                             <a href={`https://wa.me/?text=${encodeURIComponent(groupUpdate)}`} target="_blank" rel="noreferrer" style={{ background:'#0d1f0d', border:'1px solid #25d36644', color:'#25d366', fontFamily:'Inter,sans-serif', fontSize:11, fontWeight:700, letterSpacing:1, textTransform:'uppercase', padding:'8px 14px', cursor:'pointer', borderRadius:8, textDecoration:'none', display:'inline-block' }}>📲 Share WA</a>
@@ -544,10 +544,10 @@ export default function App() {
 
                     {/* WA panel */}
                     {panelOpen && panelType==='wa' && (
-                      <div className="slide-in" style={{ background:'#0c1828', border:'1px solid #25d36622', borderRadius:12, overflow:'hidden' }}>
+                      <div className="slide-in" style={{ background:'#111e2e', border:'1px solid #25d36622', borderRadius:12, overflow:'hidden' }}>
                         <div style={{ padding:'10px 16px', borderBottom:'1px solid #0e2040', fontSize:10, fontWeight:700, letterSpacing:2, color:'#25d366', textTransform:'uppercase' }}>📲 Message Players</div>
                         {[
-                          {icon:'📣',label:'Announce to All',color:'#6b9ef0',people:players,msg:()=>buildAnnounceMsg(session),desc:`${players.length} members`},
+                          {icon:'📣',label:'Announce to All',color:'#7aacdc',people:players,msg:()=>buildAnnounceMsg(session),desc:`${players.length} members`},
                           {icon:'⏰',label:'Chase Unsigned',color:'#d8b84a',people:unsigned,msg:(p)=>`🎾 Hey ${p.name}! Still ${session.spots-signups.length} spots left for padel on *${formatDate(session.date)} at ${session.time}*.\n\n📍 ${session.location_name}\n\n👉 Sign up: ${window.location.origin}`,desc:`${unsigned.length} players`,disabled:unsigned.length===0},
                           {icon:'😔',label:'Notify Left Out',color:'#d87a7a',people:players.filter(p=>!signups.includes(p.name)&&!waitlist.includes(p.name)),msg:(p)=>`🎾 Hey ${p.name}, the session on *${formatDate(session.date)}* is now full. We'll get you next time! 🙏`,desc:`${players.filter(p=>!signups.includes(p.name)).length} players`,disabled:!isFull},
                           {icon:'🏆',label:'Send Draw',color:'#7ab8d8',people:players.filter(p=>signups.includes(p.name)),msg:()=>buildGroupUpdate(session,playerMap),desc:`${signups.length} confirmed`,disabled:!session.matches},
@@ -564,7 +564,7 @@ export default function App() {
                     )}
 
                     <div style={{ marginTop:12, textAlign:'right' }}>
-                      <button onClick={()=>handleDeleteSession(session.id)} style={{ background:'none',border:'none',color:'#2a1a1a',fontSize:10,cursor:'pointer',fontFamily:'Inter,sans-serif',fontWeight:500 }}>delete session</button>
+                      <button onClick={()=>handleDeleteSession(session.id)} style={{ background:'none',border:'none',color:'#3a4a5a',fontSize:10,cursor:'pointer',fontFamily:'Inter,sans-serif',fontWeight:500 }}>delete session</button>
                     </div>
                   </div>
                 </div>
@@ -576,27 +576,27 @@ export default function App() {
         {/* ── PLAYERS TAB ── */}
         {!loading && tab==='Players' && (
           <div className="fade-up">
-            <div style={{ background:'#0c1628', border:'1px solid #142458', borderRadius:16, padding:20, marginBottom:20 }}>
-              <div style={{ fontSize:13, fontWeight:700, letterSpacing:1.5, color:'#6b9ef0', textTransform:'uppercase', marginBottom:16 }}>👋 Add Player</div>
+            <div style={{ background:'#101828', border:'1px solid #142458', borderRadius:16, padding:20, marginBottom:20 }}>
+              <div style={{ fontSize:13, fontWeight:700, letterSpacing:1.5, color:'#7aacdc', textTransform:'uppercase', marginBottom:16 }}>👋 Add Player</div>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:12 }}>
                 {[{label:'Name',key:'name',placeholder:'e.g. João'},{label:'WhatsApp',key:'phone',placeholder:'+351...'}].map(f=>(
                   <div key={f.key}>
-                    <label style={{ fontSize:10,letterSpacing:2,color:'#243c8a',textTransform:'uppercase',display:'block',marginBottom:6,fontWeight:600 }}>{f.label}</label>
+                    <label style={{ fontSize:10,letterSpacing:2,color:'#3a5c8a',textTransform:'uppercase',display:'block',marginBottom:6,fontWeight:600 }}>{f.label}</label>
                     <input value={newPlayer[f.key]} onChange={e=>setNewPlayer({...newPlayer,[f.key]:e.target.value})} onKeyDown={e=>e.key==='Enter'&&handleAddPlayer()} placeholder={f.placeholder} style={INP} />
                   </div>
                 ))}
               </div>
               <div style={{ marginBottom:16 }}>
-                <label style={{ fontSize:10,letterSpacing:2,color:'#243c8a',textTransform:'uppercase',display:'block',marginBottom:10,fontWeight:600 }}>Level (1=Pro · 6=Newcomer)</label>
+                <label style={{ fontSize:10,letterSpacing:2,color:'#3a5c8a',textTransform:'uppercase',display:'block',marginBottom:10,fontWeight:600 }}>Level (1=Pro · 6=Newcomer)</label>
                 <LevelPicker value={newPlayer.level} onChange={l=>setNewPlayer({...newPlayer,level:l})} size={38} />
               </div>
               <button className="btn-hover" onClick={handleAddPlayer}
-                style={{ background:'linear-gradient(135deg,#0f2a5a,#0a1a48)', border:'none', color:'#d4e6f8', fontFamily:'Inter,sans-serif', fontSize:12, fontWeight:700, letterSpacing:1.5, textTransform:'uppercase', padding:'10px 20px', cursor:'pointer', borderRadius:10, boxShadow:'0 4px 12px rgba(40,90,160,0.25)' }}>
+                style={{ background:'linear-gradient(135deg,#0f2a5a,#0a1a48)', border:'none', color:'#dceaf8', fontFamily:'Inter,sans-serif', fontSize:12, fontWeight:700, letterSpacing:1.5, textTransform:'uppercase', padding:'10px 20px', cursor:'pointer', borderRadius:10, boxShadow:'0 4px 12px rgba(40,90,160,0.25)' }}>
                 Add Player 👋
               </button>
             </div>
 
-            <div style={{ fontSize:14, fontWeight:700, color:'#d4e6f8', marginBottom:12 }}>Members ({players.length})</div>
+            <div style={{ fontSize:14, fontWeight:700, color:'#dceaf8', marginBottom:12 }}>Members ({players.length})</div>
 
             <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
               {players.map((p,i)=>(
@@ -606,19 +606,19 @@ export default function App() {
                     <div style={{ flex:1, minWidth:0 }}>
                       <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                         <span style={{ fontSize:14, fontWeight:p.name===currentUser?700:500, color:p.name===currentUser?'#b8d4f8':'#7a9a7a' }}>{p.name}</span>
-                        {p.name===currentUser && <span style={{ fontSize:9, fontWeight:700, letterSpacing:1, color:'#2a50d8', background:'#0e2040', border:'1px solid #2e56b0', padding:'1px 6px', borderRadius:6 }}>YOU</span>}
+                        {p.name===currentUser && <span style={{ fontSize:9, fontWeight:700, letterSpacing:1, color:'#2a50d8', background:'#142040', border:'1px solid #2e56b0', padding:'1px 6px', borderRadius:6 }}>YOU</span>}
                         <LevelBadge level={p.level} />
                       </div>
-                      <div style={{ fontSize:11, color:'#1e3078', marginTop:2 }}>{p.phone||'no number'}{p.level?` · ${LEVEL_LABELS[p.level]}`:''}</div>
+                      <div style={{ fontSize:11, color:'#3a5888', marginTop:2 }}>{p.phone||'no number'}{p.level?` · ${LEVEL_LABELS[p.level]}`:''}</div>
                     </div>
                     <div style={{ display:'flex', gap:8, alignItems:'center' }}>
                       {p.phone && <a href={waLink(p.phone,'Hey! 🎾')} target="_blank" rel="noreferrer" style={{ fontSize:16, textDecoration:'none', opacity:0.5 }}>💬</a>}
-                      {p.name!==currentUser && <button onClick={()=>handleRemovePlayer(p.id)} style={{ background:'none',border:'none',color:'#2a1a1a',cursor:'pointer',fontSize:14,fontWeight:700 }}>✕</button>}
+                      {p.name!==currentUser && <button onClick={()=>handleRemovePlayer(p.id)} style={{ background:'none',border:'none',color:'#3a4a5a',cursor:'pointer',fontSize:14,fontWeight:700 }}>✕</button>}
                     </div>
                   </div>
                   {p.name===currentUser && (
                     <div style={{ marginTop:12, paddingTop:12, borderTop:'1px solid #142458' }}>
-                      <div style={{ fontSize:10, fontWeight:700, letterSpacing:1.5, color:'#223c82', textTransform:'uppercase', marginBottom:10 }}>Update Your Level</div>
+                      <div style={{ fontSize:10, fontWeight:700, letterSpacing:1.5, color:'#3a5a88', textTransform:'uppercase', marginBottom:10 }}>Update Your Level</div>
                       <div style={{ display:'flex', gap:6 }}>
                         {LEVELS.map(l=>(
                           <button key={l} className="level-btn btn-hover" onClick={()=>handleUpdateLevel(p,l)} style={{ width:36, height:36, borderRadius:'50%', border:`2px solid ${p.level===l?LEVEL_COLORS[l]:'#121e48'}`, background:p.level===l?LEVEL_COLORS[l]+'33':'#0c1828', color:p.level===l?LEVEL_COLORS[l]:'#3a4a3a', fontFamily:'Inter,sans-serif', fontSize:13, fontWeight:800, cursor:'pointer' }}>{l}</button>
@@ -637,8 +637,8 @@ export default function App() {
           <div className="fade-up">
             <div style={{ textAlign:'center', marginBottom:28 }}>
               <div className="ball-bounce" style={{ fontSize:56, marginBottom:8 }}>🎾</div>
-              <h2 style={{ fontSize:28, fontWeight:900, color:'#d4e6f8', margin:'0 0 8px', letterSpacing:-0.5 }}>Smash</h2>
-              <p style={{ color:'#244490', fontSize:14 }}>Your padel group's coordination hub</p>
+              <h2 style={{ fontSize:28, fontWeight:900, color:'#dceaf8', margin:'0 0 8px', letterSpacing:-0.5 }}>Smash</h2>
+              <p style={{ color:'#3a5e98', fontSize:14 }}>Your padel group's coordination hub</p>
             </div>
 
             <QuoteBanner />
@@ -651,17 +651,17 @@ export default function App() {
                 ['🏆','Balanced Draw','Teams are matched by skill level. Better players against better players, beginners together.'],
                 ['🔗','WhatsApp First','Share the link in your group, copy the player list back. Built for how you already communicate.'],
               ].map(([icon,title,desc])=>(
-                <div key={title} className="card" style={{ background:'#0c1628', border:'1px solid #142458', borderRadius:14, padding:16, display:'flex', gap:14, alignItems:'flex-start' }}>
+                <div key={title} className="card" style={{ background:'#101828', border:'1px solid #142458', borderRadius:14, padding:16, display:'flex', gap:14, alignItems:'flex-start' }}>
                   <div style={{ fontSize:28, flexShrink:0 }}>{icon}</div>
                   <div>
-                    <div style={{ fontSize:14, fontWeight:700, color:'#b8d4f8', marginBottom:4 }}>{title}</div>
-                    <div style={{ fontSize:13, color:'#243c8a', lineHeight:1.6 }}>{desc}</div>
+                    <div style={{ fontSize:14, fontWeight:700, color:'#c8dcf8', marginBottom:4 }}>{title}</div>
+                    <div style={{ fontSize:13, color:'#3a5c8a', lineHeight:1.6 }}>{desc}</div>
                   </div>
                 </div>
               ))}
 
               <div style={{ background:'linear-gradient(135deg,#0d1e38,#080e1e)', border:'1px solid #2e56b0', borderRadius:14, padding:16, marginTop:4 }}>
-                <div style={{ fontSize:11, fontWeight:700, letterSpacing:2, color:'#2e52a8', textTransform:'uppercase', marginBottom:12 }}>Level Guide</div>
+                <div style={{ fontSize:11, fontWeight:700, letterSpacing:2, color:'#4a70b0', textTransform:'uppercase', marginBottom:12 }}>Level Guide</div>
                 {LEVELS.map(l=>(
                   <div key={l} style={{ display:'flex', alignItems:'center', gap:10, marginBottom:8 }}>
                     <LevelBadge level={l} />
@@ -677,11 +677,11 @@ export default function App() {
       {/* ── Matches Modal ── */}
       {viewMatches && matchSession && (
         <div className="fade-in" style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.85)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:200, padding:16, backdropFilter:'blur(4px)' }} onClick={()=>setViewMatches(null)}>
-          <div className="fade-up" style={{ background:'#0c1628', border:'1px solid #2e56b0', borderRadius:20, padding:24, maxWidth:440, width:'100%', maxHeight:'85vh', overflowY:'auto', boxShadow:'0 32px 80px rgba(0,0,0,0.8)' }} onClick={e=>e.stopPropagation()}>
+          <div className="fade-up" style={{ background:'#101828', border:'1px solid #2e56b0', borderRadius:20, padding:24, maxWidth:440, width:'100%', maxHeight:'85vh', overflowY:'auto', boxShadow:'0 32px 80px rgba(0,0,0,0.8)' }} onClick={e=>e.stopPropagation()}>
             <div style={{ textAlign:'center', marginBottom:20 }}>
               <div style={{ fontSize:10, fontWeight:700, letterSpacing:3, color:'#2a50d8', textTransform:'uppercase', marginBottom:6 }}>Balanced Draw 🏆</div>
-              <div style={{ fontSize:20, fontWeight:800, color:'#d4e6f8' }}>{formatDate(matchSession.date)}</div>
-              <div style={{ fontSize:13, color:'#244490', marginTop:4 }}>{matchSession.time} · {matchSession.location_name}</div>
+              <div style={{ fontSize:20, fontWeight:800, color:'#dceaf8' }}>{formatDate(matchSession.date)}</div>
+              <div style={{ fontSize:13, color:'#3a5e98', marginTop:4 }}>{matchSession.time} · {matchSession.location_name}</div>
             </div>
             {matchSession.matches && matchSession.matches.map((m,i)=>(
               <div key={i} style={{ background:'#0f1f0f', border:'1px solid #1e3e1e', borderRadius:14, padding:16, marginBottom:12 }}>
@@ -690,12 +690,12 @@ export default function App() {
                   <div style={{ flex:1 }}>
                     {m.team1.map(p=>(
                       <div key={p} style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:6, marginBottom:6 }}>
-                        <span style={{ color:'#b8d4f8', fontSize:14, fontWeight:600 }}>{p}</span>
+                        <span style={{ color:'#c8dcf8', fontSize:14, fontWeight:600 }}>{p}</span>
                         <LevelBadge level={playerMap[p]?.level} />
                       </div>
                     ))}
                   </div>
-                  <div style={{ background:'#142458', color:'#5080d0', fontSize:11, fontWeight:800, letterSpacing:2, padding:'6px 10px', borderRadius:8, flexShrink:0 }}>VS</div>
+                  <div style={{ background:'#142458', color:'#5a8ed8', fontSize:11, fontWeight:800, letterSpacing:2, padding:'6px 10px', borderRadius:8, flexShrink:0 }}>VS</div>
                   <div style={{ flex:1 }}>
                     {m.team2.map(p=>(
                       <div key={p} style={{ display:'flex', alignItems:'center', gap:6, marginBottom:6 }}>
@@ -709,7 +709,7 @@ export default function App() {
             ))}
             <div style={{ display:'flex', gap:10, marginTop:16 }}>
               <button className="btn-hover" onClick={()=>handleGenMatches(matchSession)} style={{ flex:1, background:'linear-gradient(135deg,#0f2060,#0c1a48)', border:'1px solid #2a4a7a', color:'#7ab8d8', fontFamily:'Inter,sans-serif', fontSize:12, fontWeight:700, letterSpacing:1, textTransform:'uppercase', padding:'12px', cursor:'pointer', borderRadius:10 }}>↺ Re-balance</button>
-              <button className="btn-hover" onClick={()=>setViewMatches(null)} style={{ flex:1, background:'#0d1c32', border:'1px solid #2a3a2a', color:'#2c4c98', fontFamily:'Inter,sans-serif', fontSize:12, fontWeight:700, letterSpacing:1, textTransform:'uppercase', padding:'12px', cursor:'pointer', borderRadius:10 }}>Close</button>
+              <button className="btn-hover" onClick={()=>setViewMatches(null)} style={{ flex:1, background:'#12203a', border:'1px solid #2a3a2a', color:'#3a60a0', fontFamily:'Inter,sans-serif', fontSize:12, fontWeight:700, letterSpacing:1, textTransform:'uppercase', padding:'12px', cursor:'pointer', borderRadius:10 }}>Close</button>
             </div>
           </div>
         </div>
