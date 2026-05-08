@@ -18,21 +18,31 @@ function formatDate(dateStr) {
 }
 
 function generateBalancedMatches(signups, playerMap) {
-  // Sort by level ascending (level 1 = best, 6 = worst)
+  // Sort players by level (1=best, 6=worst)
   const sorted = [...signups].sort((a, b) => {
     const la = playerMap[a]?.level || 3;
     const lb = playerMap[b]?.level || 3;
     return la - lb;
   });
-  // Snake draft into courts: pair best with worst for balance
+
+  // Split into top half (better) and bottom half (weaker)
+  const half = Math.floor(sorted.length / 2);
+  const top = sorted.slice(0, half);
+  const bottom = sorted.slice(half);
+
+  // Shuffle within each group for variety
+  const topShuffled = shuffle(top);
+  const bottomShuffled = shuffle(bottom);
+
+  // Pair up: top player + top player vs bottom player + bottom player
+  // This means same-level players partner together and face similar opponents
   const matches = [];
-  const n = Math.floor(sorted.length / 4);
-  for (let i = 0; i < n; i++) {
-    // Take players from top, middle, bottom for balance
+  const numCourts = Math.floor(sorted.length / 4);
+  for (let i = 0; i < numCourts; i++) {
     matches.push({
       court: `Court ${i + 1}`,
-      team1: [sorted[i], sorted[sorted.length - 1 - i]],
-      team2: [sorted[n + i], sorted[sorted.length - 1 - n - i]],
+      team1: [topShuffled[i * 2], topShuffled[i * 2 + 1]],
+      team2: [bottomShuffled[i * 2], bottomShuffled[i * 2 + 1]],
     });
   }
   return matches;
@@ -78,6 +88,35 @@ const S = {
 const TABS = ['Sessions', 'Players', 'About'];
 const LEVELS = [1, 2, 3, 4, 5, 6];
 const LEVEL_LABELS = { 1: '⭐⭐⭐ Pro', 2: '⭐⭐ Advanced', 3: '⭐ Intermediate', 4: 'Beginner+', 5: 'Beginner', 6: 'Newcomer' };
+const LEVEL_COLORS = { 1: '#f0c040', 2: '#d8a840', 3: '#7ab8d8', 4: '#8ad87a', 5: '#a8a8d8', 6: '#d87a7a' };
+
+function LevelBadge({ level }) {
+  if (!level) return null;
+  return (
+    <span style={{ background: '#1a2a1a', border: `1px solid ${LEVEL_COLORS[level] || '#2a4a2a'}`, color: LEVEL_COLORS[level] || '#5a8a5a', fontSize: 10, padding: '1px 7px', borderRadius: 3, fontWeight: 'bold', letterSpacing: 1 }}>
+      L{level}
+    </span>
+  );
+}
+
+function LevelPicker({ value, onChange }) {
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 8 }}>
+        {LEVELS.map(l => (
+          <button key={l} onClick={() => onChange(l)} style={{
+            width: 44, height: 44, borderRadius: '50%',
+            border: `2px solid ${value === l ? LEVEL_COLORS[l] : '#2a4a2a'}`,
+            background: value === l ? '#1a3a1a' : '#111',
+            color: value === l ? LEVEL_COLORS[l] : '#5a7a5a',
+            fontFamily: 'inherit', fontSize: 16, fontWeight: 'bold', cursor: 'pointer',
+          }}>{l}</button>
+        ))}
+      </div>
+      <div style={{ textAlign: 'center', fontSize: 12, color: LEVEL_COLORS[value] || '#5a7a5a' }}>{LEVEL_LABELS[value] || ''}</div>
+    </div>
+  );
+}
 
 function NameEntry({ onEnter }) {
   const [name, setName] = useState('');
@@ -88,20 +127,13 @@ function NameEntry({ onEnter }) {
       <h1 style={{ ...S.h1, marginBottom: 8, textAlign: 'center' }}>Smash</h1>
       <p style={{ color: '#5a7a5a', marginBottom: 32, textAlign: 'center', fontSize: 15 }}>Enter your name to join your padel group</p>
       <div style={{ width: '100%', maxWidth: 340 }}>
-        <input value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === 'Enter' && name.trim() && onEnter(name.trim(), level)}
-          placeholder="Your name..." style={{ ...S.inp, fontSize: 18, padding: '14px 16px', marginBottom: 20, textAlign: 'center' }} autoFocus />
-        <div style={{ marginBottom: 20 }}>
-          <label style={{ ...S.label, textAlign: 'center', display: 'block', marginBottom: 12 }}>Your level (1 = best, 6 = newcomer)</label>
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
-            {LEVELS.map(l => (
-              <button key={l} onClick={() => setLevel(l)} style={{
-                width: 44, height: 44, borderRadius: '50%', border: `2px solid ${level === l ? '#7ab87a' : '#2a4a2a'}`,
-                background: level === l ? '#2a5a2a' : '#111', color: level === l ? '#a8d8a8' : '#5a7a5a',
-                fontFamily: 'inherit', fontSize: 16, fontWeight: 'bold', cursor: 'pointer',
-              }}>{l}</button>
-            ))}
-          </div>
-          <div style={{ textAlign: 'center', color: '#7ab87a', fontSize: 13, marginTop: 8 }}>{LEVEL_LABELS[level]}</div>
+        <input value={name} onChange={e => setName(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && name.trim() && onEnter(name.trim(), level)}
+          placeholder="Your name..."
+          style={{ ...S.inp, fontSize: 18, padding: '14px 16px', marginBottom: 24, textAlign: 'center' }} autoFocus />
+        <div style={{ marginBottom: 24 }}>
+          <label style={{ ...S.label, textAlign: 'center', display: 'block', marginBottom: 12 }}>Your level (1 = Pro, 6 = Newcomer)</label>
+          <LevelPicker value={level} onChange={setLevel} />
         </div>
         <button onClick={() => name.trim() && onEnter(name.trim(), level)}
           style={{ ...S.btn('#a8d8a8', '#2a5a2a', '#4a8a4a'), width: '100%', fontSize: 14, padding: '12px' }}>
@@ -130,7 +162,13 @@ export default function App() {
   players.forEach(p => { playerMap[p.name] = p; });
 
   const showToast = (msg, color = '#7ab87a') => { setToast({ msg, color }); setTimeout(() => setToast(null), 2500); };
-  const copyText = (key, text) => { navigator.clipboard.writeText(text).then(() => { setCopied(s => ({ ...s, [key]: true })); setTimeout(() => setCopied(s => ({ ...s, [key]: false })), 2000); showToast('Copied!'); }); };
+  const copyText = (key, text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(s => ({ ...s, [key]: true }));
+      setTimeout(() => setCopied(s => ({ ...s, [key]: false })), 2000);
+      showToast('Copied!');
+    });
+  };
 
   const loadSessions = useCallback(async () => {
     const { data, error } = await supabase.from('sessions').select('*').order('created_at', { ascending: true });
@@ -138,7 +176,7 @@ export default function App() {
   }, []);
 
   const loadPlayers = useCallback(async () => {
-    const { data, error } = await supabase.from('players').select('*').order('name', { ascending: true });
+    const { data, error } = await supabase.from('players').select('*').order('level', { ascending: true });
     if (!error && data) setPlayers(data);
   }, []);
 
@@ -161,28 +199,48 @@ export default function App() {
   };
 
   const handleSignUp = async (session) => {
-    const signups = session.signups || []; const waitlist = session.waitlist || [];
-    const isFull = signups.length >= session.spots; const isIn = signups.includes(currentUser); const isWaiting = waitlist.includes(currentUser);
+    const signups = session.signups || [];
+    const waitlist = session.waitlist || [];
+    const isFull = signups.length >= session.spots;
+    const isIn = signups.includes(currentUser);
+    const isWaiting = waitlist.includes(currentUser);
     let us = [...signups]; let uw = [...waitlist];
-    if (isIn) { us = signups.filter(n => n !== currentUser); if (uw.length > 0) { const next = uw.shift(); us.push(next); } showToast('Cancelled.'); }
-    else if (isWaiting) { uw = waitlist.filter(n => n !== currentUser); showToast('Removed from waitlist.'); }
-    else if (isFull) { uw = [...waitlist, currentUser]; showToast("You're on the waitlist! ⏳", '#d8b84a'); }
-    else { us = [...signups, currentUser]; showToast("You're in! 🎾"); }
+    if (isIn) {
+      us = signups.filter(n => n !== currentUser);
+      if (uw.length > 0) { const next = uw.shift(); us.push(next); }
+      showToast('Cancelled.');
+    } else if (isWaiting) {
+      uw = waitlist.filter(n => n !== currentUser);
+      showToast('Removed from waitlist.');
+    } else if (isFull) {
+      uw = [...waitlist, currentUser];
+      showToast("You're on the waitlist! ⏳", '#d8b84a');
+    } else {
+      us = [...signups, currentUser];
+      showToast("You're in! 🎾");
+    }
     await supabase.from('sessions').update({ signups: us, waitlist: uw }).eq('id', session.id);
     loadSessions();
   };
 
   const handleCreateSession = async () => {
     if (!newSession.date || !newSession.time || !newSession.duration || !newSession.spots || !newSession.location_name) return;
-    await supabase.from('sessions').insert({ date: newSession.date, time: newSession.time, duration: parseFloat(newSession.duration), spots: parseInt(newSession.spots), location_name: newSession.location_name, location_address: newSession.location_address, signups: [], waitlist: [], matches: null });
+    await supabase.from('sessions').insert({
+      date: newSession.date, time: newSession.time,
+      duration: parseFloat(newSession.duration), spots: parseInt(newSession.spots),
+      location_name: newSession.location_name, location_address: newSession.location_address,
+      signups: [], waitlist: [], matches: null
+    });
     setNewSession({ date: '', time: '', duration: '', spots: '', location_name: '', location_address: '' });
-    setShowNewSession(false); showToast('Session created! 🎾');
+    setShowNewSession(false);
+    showToast('Session created! 🎾');
   };
 
   const handleGenerateMatches = async (session) => {
     const matches = generateBalancedMatches(session.signups, playerMap);
     await supabase.from('sessions').update({ matches }).eq('id', session.id);
-    loadSessions(); setViewMatches(session.id);
+    loadSessions();
+    setViewMatches(session.id);
   };
 
   const handleDeleteSession = async (id) => { await supabase.from('sessions').delete().eq('id', id); loadSessions(); };
@@ -192,10 +250,17 @@ export default function App() {
     const exists = players.find(p => p.name.toLowerCase() === newPlayer.name.trim().toLowerCase());
     if (exists) { showToast('Player already exists.', '#d87a7a'); return; }
     await supabase.from('players').insert({ name: newPlayer.name.trim(), phone: newPlayer.phone.trim(), level: newPlayer.level || 3 });
-    setNewPlayer({ name: '', phone: '', level: 3 }); showToast('Player added!');
+    setNewPlayer({ name: '', phone: '', level: 3 });
+    showToast('Player added!');
   };
 
   const handleRemovePlayer = async (id) => { await supabase.from('players').delete().eq('id', id); loadPlayers(); };
+
+  const handleUpdateLevel = async (player, newLevel) => {
+    await supabase.from('players').update({ level: newLevel }).eq('id', player.id);
+    loadPlayers();
+    showToast(`${player.name} updated to Level ${newLevel}`);
+  };
 
   const matchSession = sessions.find(s => s.id === viewMatches);
   if (!currentUser) return <NameEntry onEnter={handleEnter} players={players} />;
@@ -203,6 +268,7 @@ export default function App() {
   return (
     <div style={S.page}>
       {toast && <div style={{ position: 'fixed', top: 16, left: '50%', transform: 'translateX(-50%)', background: '#1a3a1a', border: `1px solid ${toast.color}`, color: toast.color, padding: '10px 20px', borderRadius: 20, fontSize: 13, zIndex: 200, whiteSpace: 'nowrap' }}>{toast.msg}</div>}
+
       <div style={S.header}>
         <div style={S.inner}>
           <div style={{ paddingTop: 24, paddingBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -213,8 +279,10 @@ export default function App() {
             </div>
             <div style={{ textAlign: 'right' }}>
               <div style={{ fontSize: 11, color: '#5a7a5a' }}>Playing as</div>
-              <div style={{ fontSize: 14, color: '#a8d8a8' }}>{currentUser}</div>
-              {playerMap[currentUser]?.level && <div style={{ fontSize: 10, color: '#5a7a5a' }}>Level {playerMap[currentUser].level}</div>}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'flex-end' }}>
+                <div style={{ fontSize: 14, color: '#a8d8a8' }}>{currentUser}</div>
+                {playerMap[currentUser]?.level && <LevelBadge level={playerMap[currentUser].level} />}
+              </div>
               <button onClick={() => { localStorage.removeItem('smash_name'); setCurrentUser(null); }} style={{ background: 'none', border: 'none', color: '#3a5a3a', fontSize: 10, cursor: 'pointer', padding: 0 }}>change</button>
             </div>
           </div>
@@ -250,11 +318,15 @@ export default function App() {
             {sessions.length === 0 && <div style={{ textAlign: 'center', color: '#3a5a3a', padding: 48 }}>No sessions yet. Create one!</div>}
 
             {sessions.map(session => {
-              const signups = session.signups || []; const waitlist = session.waitlist || [];
-              const isFull = signups.length >= session.spots; const isIn = signups.includes(currentUser); const isWaiting = waitlist.includes(currentUser);
+              const signups = session.signups || [];
+              const waitlist = session.waitlist || [];
+              const isFull = signups.length >= session.spots;
+              const isIn = signups.includes(currentUser);
+              const isWaiting = waitlist.includes(currentUser);
               const pct = Math.min(100, (signups.length / session.spots) * 100);
               const unsigned = players.filter(p => !signups.includes(p.name) && !waitlist.includes(p.name));
-              const panelOpen = openPanel?.id === session.id; const panelType = openPanel?.type;
+              const panelOpen = openPanel?.id === session.id;
+              const panelType = openPanel?.type;
               const groupUpdate = buildGroupUpdate(session, playerMap);
               const announceMsg = buildAnnounceMsg(session);
 
@@ -274,13 +346,11 @@ export default function App() {
                   </div>
 
                   <div style={{ padding: '14px 16px' }}>
-                    {/* Progress */}
                     <div style={{ marginBottom: 14 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#4a6a4a', marginBottom: 4 }}><span>{signups.length} confirmed</span><span>{session.spots} spots</span></div>
                       <div style={{ height: 3, background: '#1a2a1a', borderRadius: 2 }}><div style={{ height: '100%', width: `${pct}%`, background: isFull ? '#d87a7a' : '#4a8a4a', borderRadius: 2, transition: 'width 0.4s' }} /></div>
                     </div>
 
-                    {/* Confirmed list with levels */}
                     {signups.length > 0 && (
                       <div style={{ marginBottom: 10 }}>
                         <div style={{ fontSize: 10, letterSpacing: 2, color: '#4a6a4a', textTransform: 'uppercase', marginBottom: 8 }}>✅ Confirmed ({signups.length})</div>
@@ -288,12 +358,10 @@ export default function App() {
                           {signups.map((p, i) => {
                             const pl = playerMap[p];
                             return (
-                              <div key={p} style={{ display: 'flex', alignItems: 'center', gap: 8, background: p === currentUser ? '#1a3a1a' : '#0a120a', border: `1px solid ${p === currentUser ? '#3a6a3a' : '#1a2a1a'}`, borderRadius: 4, padding: '6px 10px' }}>
-                                <span style={{ color: '#4a6a4a', fontSize: 11, minWidth: 18 }}>{i + 1}.</span>
+                              <div key={p} style={{ display: 'flex', alignItems: 'center', gap: 8, background: p === currentUser ? '#1a3a1a' : '#0a120a', border: `1px solid ${p === currentUser ? '#3a6a3a' : '#1a2a1a'}`, borderRadius: 4, padding: '7px 10px' }}>
+                                <span style={{ color: '#3a5a3a', fontSize: 11, minWidth: 20 }}>{i + 1}.</span>
                                 <span style={{ flex: 1, fontSize: 13, color: p === currentUser ? '#a8d8a8' : '#8aaa8a' }}>{p}{p === currentUser ? ' ★' : ''}</span>
-                                {pl?.level && (
-                                  <span style={{ background: '#1a2a1a', border: '1px solid #2a4a2a', color: '#5a8a5a', fontSize: 10, padding: '1px 6px', borderRadius: 3 }}>Lv.{pl.level}</span>
-                                )}
+                                <LevelBadge level={pl?.level} />
                               </div>
                             );
                           })}
@@ -301,23 +369,35 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* Waitlist */}
                     {waitlist.length > 0 && (
                       <div style={{ marginBottom: 10 }}>
                         <div style={{ fontSize: 10, letterSpacing: 2, color: '#6a5a3a', textTransform: 'uppercase', marginBottom: 6 }}>⏳ Waitlist ({waitlist.length})</div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>{waitlist.map((p, i) => <span key={p} style={{ background: '#2a1a0a', border: '1px solid #4a3a1a', color: '#c8a86a', fontSize: 11, padding: '3px 10px', borderRadius: 20 }}>#{i + 1} {p}</span>)}</div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                          {waitlist.map((p, i) => {
+                            const pl = playerMap[p];
+                            return (
+                              <span key={p} style={{ display: 'flex', alignItems: 'center', gap: 5, background: '#2a1a0a', border: '1px solid #4a3a1a', color: '#c8a86a', fontSize: 11, padding: '3px 10px', borderRadius: 20 }}>
+                                #{i + 1} {p} {pl?.level && <LevelBadge level={pl.level} />}
+                              </span>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
 
-                    {/* Not signed up */}
                     {unsigned.length > 0 && (
                       <div style={{ marginBottom: 14 }}>
                         <div style={{ fontSize: 10, letterSpacing: 2, color: '#4a3a3a', textTransform: 'uppercase', marginBottom: 6 }}>✗ Not in ({unsigned.length})</div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>{unsigned.map(p => <span key={p.name} style={{ background: '#1a1010', border: '1px solid #2a1a1a', color: '#5a4a4a', fontSize: 11, padding: '3px 9px', borderRadius: 20 }}>{p.name}</span>)}</div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                          {unsigned.map(p => (
+                            <span key={p.name} style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#1a1010', border: '1px solid #2a1a1a', color: '#5a4a4a', fontSize: 11, padding: '3px 9px', borderRadius: 20 }}>
+                              {p.name} {p.level && <LevelBadge level={p.level} />}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     )}
 
-                    {/* Buttons */}
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                       <button onClick={() => handleSignUp(session)} style={{ ...S.btn(isIn ? '#d87a7a' : isWaiting ? '#c8a86a' : isFull ? '#5a5a5a' : '#a8d8a8', isIn ? '#3a1a1a' : isWaiting ? '#2a1a0a' : isFull ? '#1a1a1a' : '#2a5a2a', isIn ? '#5a2a2a' : isWaiting ? '#4a3a1a' : isFull ? '#2a2a2a' : '#4a8a4a'), fontSize: 13 }}>
                         {isIn ? '✕ Cancel' : isWaiting ? '⏳ Leave Waitlist' : isFull ? '+ Join Waitlist' : '✓ Sign Up'}
@@ -331,7 +411,6 @@ export default function App() {
                       <button onClick={() => setOpenPanel(panelOpen && panelType === 'wa' ? null : { id: session.id, type: 'wa' })} style={S.btn('#25d366', '#0a1f0a', '#25d36633')}>📲 WA</button>
                     </div>
 
-                    {/* Share panel */}
                     {panelOpen && panelType === 'share' && (
                       <div style={{ marginTop: 14, background: '#060f06', border: '1px solid #25d36633', borderRadius: 6, overflow: 'hidden' }}>
                         <div style={{ padding: '10px 14px', borderBottom: '1px solid #0f2a0f', fontSize: 10, letterSpacing: 3, color: '#25d366', textTransform: 'uppercase' }}>🔗 Share & Update</div>
@@ -354,7 +433,6 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* WA panel */}
                     {panelOpen && panelType === 'wa' && (
                       <div style={{ marginTop: 14, background: '#060f06', border: '1px solid #25d36633', borderRadius: 6, overflow: 'hidden' }}>
                         <div style={{ padding: '10px 14px', borderBottom: '1px solid #0f2a0f', fontSize: 10, letterSpacing: 3, color: '#25d366', textTransform: 'uppercase' }}>📲 Message Players</div>
@@ -392,27 +470,38 @@ export default function App() {
               ))}
             </div>
             <div style={{ marginBottom: 14 }}>
-              <label style={S.label}>Level (1 = best, 6 = newcomer)</label>
-              <div style={{ display: 'flex', gap: 8 }}>
-                {LEVELS.map(l => (
-                  <button key={l} onClick={() => setNewPlayer({ ...newPlayer, level: l })} style={{ width: 40, height: 40, borderRadius: '50%', border: `2px solid ${newPlayer.level === l ? '#7ab87a' : '#2a4a2a'}`, background: newPlayer.level === l ? '#2a5a2a' : '#111', color: newPlayer.level === l ? '#a8d8a8' : '#5a7a5a', fontFamily: 'inherit', fontSize: 14, fontWeight: 'bold', cursor: 'pointer' }}>{l}</button>
-                ))}
-              </div>
+              <label style={{ ...S.label, marginBottom: 10 }}>Level (1 = Pro, 6 = Newcomer)</label>
+              <LevelPicker value={newPlayer.level} onChange={l => setNewPlayer({ ...newPlayer, level: l })} />
             </div>
-            <button onClick={handleAddPlayer} style={{ ...S.btn('#a8d8a8', '#2a5a2a', '#4a8a4a'), marginBottom: 20 }}>Add Player</button>
+            <button onClick={handleAddPlayer} style={{ ...S.btn('#a8d8a8', '#2a5a2a', '#4a8a4a'), marginBottom: 24, marginTop: 12 }}>Add Player</button>
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {players.sort((a, b) => (a.level || 3) - (b.level || 3)).map((p, i) => (
-                <div key={p.id || p.name} style={{ background: p.name === currentUser ? '#1a3a1a' : '#0f1a0f', border: `1px solid ${p.name === currentUser ? '#3a6a3a' : '#1e3a1e'}`, borderRadius: 4, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: `hsl(${(i * 47) % 360},40%,20%)`, border: `1px solid hsl(${(i * 47) % 360},40%,36%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: `hsl(${(i * 47) % 360},60%,65%)`, flexShrink: 0 }}>{p.name[0]}</div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, color: p.name === currentUser ? '#a8d8a8' : '#8aaa8a' }}>{p.name}{p.name === currentUser && <span style={{ fontSize: 9, color: '#5a8a5a' }}> YOU</span>}</div>
-                    <div style={{ fontSize: 10, color: '#3a5a3a' }}>{p.phone || 'no number'}</div>
+              {players.map((p, i) => (
+                <div key={p.id || p.name} style={{ background: p.name === currentUser ? '#1a3a1a' : '#0f1a0f', border: `1px solid ${p.name === currentUser ? '#3a6a3a' : '#1e3a1e'}`, borderRadius: 4, padding: '10px 14px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: p.name === currentUser ? 10 : 0 }}>
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: `hsl(${(i * 47) % 360},40%,20%)`, border: `1px solid hsl(${(i * 47) % 360},40%,36%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: `hsl(${(i * 47) % 360},60%,65%)`, flexShrink: 0 }}>{p.name[0]}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ fontSize: 13, color: p.name === currentUser ? '#a8d8a8' : '#8aaa8a' }}>{p.name}{p.name === currentUser && <span style={{ fontSize: 9, color: '#5a8a5a' }}> YOU</span>}</span>
+                        <LevelBadge level={p.level} />
+                      </div>
+                      <div style={{ fontSize: 10, color: '#3a5a3a' }}>{p.phone || 'no number'} {p.level ? `· ${LEVEL_LABELS[p.level]}` : ''}</div>
+                    </div>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      {p.phone && <a href={waLink(p.phone, 'Hey! 🎾')} target="_blank" rel="noreferrer" style={{ fontSize: 14, textDecoration: 'none', opacity: 0.5 }}>💬</a>}
+                      {p.name !== currentUser && <button onClick={() => handleRemovePlayer(p.id)} style={{ background: 'none', border: 'none', color: '#3a2a2a', cursor: 'pointer', fontSize: 12 }}>✕</button>}
+                    </div>
                   </div>
-                  <div style={{ background: '#1a2a1a', border: '1px solid #2a4a2a', color: '#5a8a5a', fontSize: 11, padding: '2px 8px', borderRadius: 3, minWidth: 40, textAlign: 'center' }}>Lv.{p.level || '?'}</div>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    {p.phone && <a href={waLink(p.phone, 'Hey! 🎾')} target="_blank" rel="noreferrer" style={{ fontSize: 14, textDecoration: 'none', opacity: 0.5 }}>💬</a>}
-                    {p.name !== currentUser && <button onClick={() => handleRemovePlayer(p.id)} style={{ background: 'none', border: 'none', color: '#3a2a2a', cursor: 'pointer', fontSize: 12 }}>✕</button>}
-                  </div>
+                  {p.name === currentUser && (
+                    <div>
+                      <div style={{ fontSize: 10, color: '#4a6a4a', marginBottom: 6, letterSpacing: 1 }}>UPDATE YOUR LEVEL</div>
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        {LEVELS.map(l => (
+                          <button key={l} onClick={() => handleUpdateLevel(p, l)} style={{ width: 34, height: 34, borderRadius: '50%', border: `2px solid ${p.level === l ? LEVEL_COLORS[l] : '#2a4a2a'}`, background: p.level === l ? '#1a3a1a' : '#111', color: p.level === l ? LEVEL_COLORS[l] : '#5a7a5a', fontFamily: 'inherit', fontSize: 13, fontWeight: 'bold', cursor: 'pointer' }}>{l}</button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -424,13 +513,19 @@ export default function App() {
           <div style={{ color: '#8aaa8a', lineHeight: 1.8, fontSize: 14 }}>
             <h2 style={{ color: '#c8e6c8', fontWeight: 400, marginBottom: 12 }}>About Smash</h2>
             <p style={{ marginBottom: 16 }}>Your padel group's coordination hub. Real-time sign-ups, level-based team balancing, waitlists, and WhatsApp integration.</p>
-            <div style={{ padding: 16, background: '#0f1a0f', border: '1px solid #1e3a1e', borderRadius: 6 }}>
-              {[['🎯', 'Player Levels', 'Rate yourself 1-6 (1=best, 6=newcomer). Teams are balanced by level so every court is competitive.'], ['🔴', 'Live data', 'Everyone sees the same list in real time.'], ['⏳', 'Waitlist', 'Auto-fills when someone cancels.'], ['🏆', 'Balanced Draw', 'Teams sorted by level for fair matches.'], ['🔗', 'Share link', 'Post in WhatsApp, players sign up directly.']].map(([icon, title, desc]) => (
-                <div key={title} style={{ display: 'flex', gap: 10, marginBottom: 12 }}>
-                  <span style={{ fontSize: 18, minWidth: 24 }}>{icon}</span>
-                  <div><div style={{ color: '#a8c8a8', fontSize: 13 }}>{title}</div><div style={{ fontSize: 12, color: '#5a7a5a' }}>{desc}</div></div>
+            <div style={{ padding: 16, background: '#0f1a0f', border: '1px solid #1e3a1e', borderRadius: 6, marginBottom: 16 }}>
+              <div style={{ fontSize: 11, letterSpacing: 2, color: '#5a7a5a', textTransform: 'uppercase', marginBottom: 12 }}>Player Levels</div>
+              {LEVELS.map(l => (
+                <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                  <LevelBadge level={l} />
+                  <span style={{ fontSize: 13, color: LEVEL_COLORS[l] }}>{LEVEL_LABELS[l]}</span>
                 </div>
               ))}
+            </div>
+            <div style={{ padding: 16, background: '#0f1a0f', border: '1px solid #1e3a1e', borderRadius: 6 }}>
+              <div style={{ fontSize: 11, letterSpacing: 2, color: '#5a7a5a', textTransform: 'uppercase', marginBottom: 12 }}>How Team Balancing Works</div>
+              <p style={{ fontSize: 13, color: '#6a8a6a', marginBottom: 8 }}>When you generate the draw, players are sorted by level and split into two groups. Better players (L1-L3) partner with other good players, and face similar-level opponents. The same goes for beginners (L4-L6).</p>
+              <p style={{ fontSize: 13, color: '#6a8a6a' }}>This ensures every court has a competitive, balanced match!</p>
             </div>
           </div>
         )}
@@ -445,11 +540,25 @@ export default function App() {
             <div style={{ fontSize: 12, color: '#5a7a5a', marginBottom: 20 }}>{matchSession.time} · {matchSession.location_name}</div>
             {matchSession.matches && matchSession.matches.map((m, i) => (
               <div key={i} style={{ background: '#131f13', border: '1px solid #1e3a1e', borderRadius: 6, padding: 14, marginBottom: 10 }}>
-                <div style={{ fontSize: 10, letterSpacing: 2, color: '#4a6a4a', textTransform: 'uppercase', marginBottom: 8 }}>{m.court}</div>
+                <div style={{ fontSize: 10, letterSpacing: 2, color: '#4a6a4a', textTransform: 'uppercase', marginBottom: 10 }}>{m.court}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ flex: 1, textAlign: 'center' }}>{m.team1.map(p => <div key={p} style={{ color: '#a8d8a8', fontSize: 14, padding: '2px 0' }}>{p}{playerMap[p]?.level ? ` (${playerMap[p].level})` : ''}</div>)}</div>
-                  <div style={{ color: '#3a5a3a', fontSize: 11, letterSpacing: 2 }}>VS</div>
-                  <div style={{ flex: 1, textAlign: 'center' }}>{m.team2.map(p => <div key={p} style={{ color: '#d8b8a8', fontSize: 14, padding: '2px 0' }}>{p}{playerMap[p]?.level ? ` (${playerMap[p].level})` : ''}</div>)}</div>
+                  <div style={{ flex: 1 }}>
+                    {m.team1.map(p => (
+                      <div key={p} style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center', marginBottom: 4 }}>
+                        <span style={{ color: '#a8d8a8', fontSize: 14 }}>{p}</span>
+                        <LevelBadge level={playerMap[p]?.level} />
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ color: '#3a5a3a', fontSize: 11, letterSpacing: 2, flexShrink: 0 }}>VS</div>
+                  <div style={{ flex: 1 }}>
+                    {m.team2.map(p => (
+                      <div key={p} style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center', marginBottom: 4 }}>
+                        <span style={{ color: '#d8b8a8', fontSize: 14 }}>{p}</span>
+                        <LevelBadge level={playerMap[p]?.level} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
